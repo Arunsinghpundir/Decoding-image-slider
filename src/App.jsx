@@ -2,16 +2,20 @@ import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
-  const [image, setImage] = useState([]);
   const [count,setCount] = useState(1);
+  const [image, setImage] = useState();
+
   const [main,setMain] = useState("")
   const [show,setShow] = useState(false)
+  const [loader,setLoader] = useState(false)
 async function apiFetch(){
+  setLoader(true)
   const url = 'https://api.slingacademy.com/v1/sample-data/photos?limit=20';
   const api = await fetch(url);
   const response = await api.json();
   console.log(response);
   setImage(response)
+  setLoader(false)
 }
 useEffect(()=>{
   apiFetch();
@@ -19,7 +23,6 @@ useEffect(()=>{
 function prev(){
   setCount(count -1 );
   setShow(false);
-
 }
 function next(){
   setCount(count +1 );
@@ -28,6 +31,11 @@ function next(){
 function settingMainImage(url){
   setMain(url);
   setShow(true)
+}
+if(loader){
+  return <div>
+    <h1>Loading...</h1>
+  </div>
 }
   return <>
   <div id="box">
